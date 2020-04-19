@@ -15,16 +15,11 @@ var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
 wss.on("connection", function(ws) {
-  ws.on('message', (data) => {
+  var id = setInterval(function() {
+    ws.send(JSON.stringify(new Date()), function() {  })
+  }, 1000)
 
-    // sends the data to all connected clients
-    wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(data);
-        }
-    });
-  });
-
+  console.log("websocket connection open")
 
   ws.on("close", function() {
     console.log("websocket connection close")
