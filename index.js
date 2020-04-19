@@ -16,17 +16,19 @@ console.log("websocket server created")
 
   console.log("websocket connection open")
 
-  ws.on("close", function() {
-    console.log("websocket connection close")
-    clearInterval(id)
-  })
-})
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(data) {
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(data);
-      }
-    });
-  });
+ws.on('open', function open() {
+  console.log('connected');
+  ws.send(Date.now());
+});
+ 
+ws.on('close', function close() {
+  console.log('disconnected');
+});
+ 
+ws.on('message', function incoming(data) {
+  console.log(`Roundtrip time: ${Date.now() - data} ms`);
+ 
+  setTimeout(function timeout() {
+    ws.send(Date.now());
+  }, 500);
 });
