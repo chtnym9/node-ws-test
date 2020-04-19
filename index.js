@@ -6,15 +6,15 @@ var port = process.env.PORT || 5000
 
 app.use(express.static(__dirname + "/"))
 
-//var server = http.createServer(app)
-//server.listen(port)
+var server = http.createServer(app)
+server.listen(port)
 
-//console.log("http server listening on %d", port)
+console.log("http server listening on %d", port)
 
-//var wss = new WebSocketServer({server: server})
-//console.log("websocket server created")
-//
-//ws.on("connection", function(ws) {
+var wss = new WebSocketServer({server: server})
+console.log("websocket server created")
+
+ws.on("connection", function(ws) {
   ws.on('connection', function(ws) {
     ws.listen('message', function(msg) {
       ws.send('message', msg);
