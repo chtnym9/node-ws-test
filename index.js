@@ -14,9 +14,7 @@ console.log("http server listening on %d", port)
 var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
-wss.on('connection', (ws) => {
-
-  // runs a callback on message event
+wss.on("connection", function(ws) {
   ws.on('message', (data) => {
 
     // sends the data to all connected clients
@@ -26,4 +24,10 @@ wss.on('connection', (ws) => {
         }
     });
   });
+
+
+  ws.on("close", function() {
+    console.log("websocket connection close")
+    clearInterval(id)
+  })
 })
