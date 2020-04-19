@@ -14,12 +14,16 @@ console.log("http server listening on %d", port)
 var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
-//ws.on("connection", function(ws) {
-  ws.on('connection', function(ws) {
-    ws.listen('message', function(msg) {
-      ws.send('message', msg);
-    });
-    ws.on('close',function(){
-      console.log("connection closed")
+wss.on('connection', (ws) => {
+
+  // runs a callback on message event
+  ws.on('message', (data) => {
+
+    // sends the data to all connected clients
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(data);
+        }
     });
   });
+})
