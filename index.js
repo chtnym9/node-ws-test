@@ -14,21 +14,15 @@ console.log("http server listening on %d", port)
 var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
+wss.on("connection", function(ws) {
+  var id = setInterval(function() {
+    ws.send(JSON.stringify(new Date()), function() {  })
+  }, 1000)
+
   console.log("websocket connection open")
 
-ws.on('open', function open() {
-  console.log('connected');
-  ws.send(Date.now());
-});
- 
-ws.on('close', function close() {
-  console.log('disconnected');
-});
- 
-ws.on('message', function incoming(data) {
-  console.log(`Roundtrip time: ${Date.now() - data} ms`);
- 
-  setTimeout(function timeout() {
-    ws.send(Date.now());
-  }, 500);
-});
+  ws.on("close", function() {
+    console.log("websocket connection close")
+    clearInterval(id)
+  })
+})
